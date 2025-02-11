@@ -5,6 +5,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"gorm.io/gorm"
 )
 
 // BeginTx begins a transaction
@@ -14,8 +15,8 @@ func (d *DB) BeginTx(ctx context.Context, txOptions *TxOptions) (context.Context
 		ctx = context.Background()
 	}
 
-	ok, _ := ctx.Value(DBTX).(*sql.Tx)
-	if ok != nil {
+	_, ok := ctx.Value(DBTX).(*gorm.DB)
+	if ok {
 		return ctx, nil
 	}
 	var exTxOptions *sql.TxOptions
@@ -26,10 +27,8 @@ func (d *DB) BeginTx(ctx context.Context, txOptions *TxOptions) (context.Context
 		}
 	}
 
-	tx, err := d.db.BeginTx(ctx, exTxOptions)
-	if err != nil {
-		return nil, err
-	}
+	tx := d.db.Begin(exTxOptions)
+
 	ctx = context.WithValue(ctx, DBTX, tx)
 	return ctx, nil
 }

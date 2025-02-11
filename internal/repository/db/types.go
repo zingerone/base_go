@@ -2,7 +2,10 @@
 // @Package: db
 package db
 
-import "database/sql"
+import (
+	"database/sql"
+	"gorm.io/gorm"
+)
 
 // DB is an interface for database operations
 type DriverName string
@@ -14,7 +17,7 @@ func (d DriverName) String() string {
 
 // DB is an interface for database operations
 type DB struct {
-	db *sql.DB
+	db *gorm.DB
 }
 
 type IsolationLevel = sql.IsolationLevel
