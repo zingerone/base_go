@@ -26,22 +26,31 @@ type NewDbConfig struct {
 	dryRun *bool
 	// PrepareStmt executes the given query in cached statement
 	prepareStmt *bool
+
 	// DisableAutomaticPing
 	disableAutomaticPing *bool
+
 	// DisableForeignKeyConstraintWhenMigrating
 	disableForeignKeyConstraintWhenMigrating *bool
+
 	// IgnoreRelationshipsWhenMigrating
 	ignoreRelationshipsWhenMigrating *bool
+
 	// DisableNestedTransaction disable nested transaction
 	disableNestedTransaction *bool
+
 	// AllowGlobalUpdate allow global update
 	allowGlobalUpdate *bool
+
 	// QueryFields executes the SQL query with all fields of the table
 	queryFields *bool
+
 	// CreateBatchSize default create batch size
 	createBatchSize *int
+
 	// TranslateError enabling error translation
 	translateError *bool
+
 	// PropagateUnscoped propagate Unscoped to every other nested statement
 	propagateUnscoped *bool
 }

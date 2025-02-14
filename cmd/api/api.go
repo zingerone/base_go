@@ -1,18 +1,18 @@
-package main
+package api
 
 import (
 	"context"
-	"log"
-	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
-
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/zingerone/base_go/internal/server/route"
+	"log"
+	"net/http"
 )
 
-func main() {
+// RunAPI runs the API server
+
+func RunAPI(ctx context.Context) {
+
 	r := gin.Default()
 	route.SetupRouter(r)
 
@@ -22,11 +22,13 @@ func main() {
 		Handler: r,
 	}
 
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
 	go func() {
-		<-quit
-		if err := srv.Shutdown(context.Background()); err != nil {
+		select {
+		case <-ctx.Done():
+			log.Println("Shutting down server...")
+		}
+
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatalf("Server forced to shutdown: %v", err)
 		}
 	}()
